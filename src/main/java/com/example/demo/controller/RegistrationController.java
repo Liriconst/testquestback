@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.exceptions.ValidationException;
 import com.example.demo.model.User;
-import com.example.demo.repository.MainRepository;
+import com.example.demo.repository.UserRepository;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,10 +19,10 @@ import java.util.Map;
 @RestController
 public class RegistrationController {
     @Autowired
-    private MainRepository mainRepository;
+    private UserRepository userRepository;
 
-    public RegistrationController(MainRepository mainRepository) {
-        this.mainRepository = mainRepository;
+    public RegistrationController(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @ApiResponses(value = {
@@ -32,14 +32,14 @@ public class RegistrationController {
     @PostMapping("/registration")
     public Boolean create(@RequestBody Map<String, String> body) throws NoSuchAlgorithmException {
         String username = body.get("username");
-        if (mainRepository.existsByUsername(username)){
+        if (userRepository.existsByUsername(username)){
             throw new ValidationException("Username already existed");
         }
         String full_name = body.get("full_name");
         String email = body.get("email");
         String password = body.get("password");
         String encodedPassword = new BCryptPasswordEncoder().encode(password);
-        mainRepository.save(new User(username, encodedPassword, full_name, email));
+        userRepository.save(new User(username, encodedPassword, full_name, email));
         return true;
     }
 }

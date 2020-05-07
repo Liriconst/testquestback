@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.UsrToken;
-import com.example.demo.repository.MainRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.config.JwtToken;
 import com.example.demo.model.JwtRequest;
 import com.example.demo.model.JwtResponse;
@@ -27,7 +27,7 @@ public class AuthorizationController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private MainRepository mainRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private UsrTokenRepository usrTokenRepository;
@@ -48,7 +48,7 @@ public class AuthorizationController {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         val userDetails = jwtUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         val token = jwtToken.generateToken(userDetails);
-        val userId = mainRepository.findByUsername(authenticationRequest.getUsername()).id;
+        val userId = userRepository.findByUsername(authenticationRequest.getUsername()).id;
         usrTokenRepository.save(new UsrToken(userId, token));
         return ResponseEntity.ok(new JwtResponse(token));
     }
