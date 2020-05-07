@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.UsrToken;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.config.JwtToken;
+import com.example.demo.entity.UsrToken;
 import com.example.demo.model.JwtRequest;
 import com.example.demo.model.JwtResponse;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.UsrTokenRepository;
 import com.example.demo.service.JwtUserDetailsService;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin
 public class AuthorizationController {
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -40,9 +41,8 @@ public class AuthorizationController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation",
-            content = @Content(schema = @Schema(implementation = JwtResponse.class)))
+                    content = @Content(schema = @Schema(implementation = JwtResponse.class)))
     })
-
     @PostMapping("/authorization")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
@@ -54,20 +54,16 @@ public class AuthorizationController {
     }
 
     @GetMapping("/checktoken")
-    public String endpoint()
-    {
-        String checkToken = "OK";
-        return checkToken;
+    public String endpoint() {
+        return "OK";
     }
 
     private void authenticate(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        }
-        catch (DisabledException e) {
+        } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
-        }
-        catch (BadCredentialsException e) {
+        } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
