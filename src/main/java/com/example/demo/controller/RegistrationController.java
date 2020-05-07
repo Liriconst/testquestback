@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.exceptions.ValidationException;
-import com.example.demo.model.Registration;
+import com.example.demo.model.User;
 import com.example.demo.repository.MainRepository;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,7 +27,7 @@ public class RegistrationController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation",
-            content = @Content(schema = @Schema(implementation = Registration.class)))
+            content = @Content(schema = @Schema(implementation = User.class)))
     })
     @PostMapping("/registration")
     public Boolean create(@RequestBody Map<String, String> body) throws NoSuchAlgorithmException {
@@ -39,7 +39,7 @@ public class RegistrationController {
         String email = body.get("email");
         String password = body.get("password");
         String encodedPassword = new BCryptPasswordEncoder().encode(password);
-        mainRepository.save(new Registration(username, encodedPassword, full_name, email));
+        mainRepository.save(new User(username, encodedPassword, full_name, email));
         return true;
     }
 }

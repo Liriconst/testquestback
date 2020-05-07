@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Registration;
+import com.example.demo.model.User;
 import com.example.demo.repository.MainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +17,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Registration user = mainRepository.findByUsername(username);
+        User user = mainRepository.findByUsername(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
