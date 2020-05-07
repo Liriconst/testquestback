@@ -1,33 +1,24 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.UsrToken;
 import com.example.demo.repository.MainRepository;
 import com.example.demo.config.JwtToken;
-import com.example.demo.exceptions.ValidationException;
 import com.example.demo.model.JwtRequest;
 import com.example.demo.model.JwtResponse;
-import com.example.demo.model.Registration;
+import com.example.demo.repository.UsrTokenRepository;
 import com.example.demo.service.JwtUserDetailsService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jdk.nashorn.internal.runtime.Undefined;
-import org.omg.CORBA.Any;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.xml.ws.Endpoint;
-import java.security.NoSuchAlgorithmException;
-import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -39,12 +30,13 @@ public class AuthorizationController {
     private MainRepository mainRepository;
 
     @Autowired
+    private UsrTokenRepository usrTokenRepository;
+
+    @Autowired
     private JwtToken jwtToken;
 
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
-
-    public long idKeeper;
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation",
@@ -54,9 +46,10 @@ public class AuthorizationController {
     @PostMapping("/authorization")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-        final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        final String token = jwtToken.generateToken(userDetails);
-        idKeeper = mainRepository.findByUsername(authenticationRequest.getUsername()).id;
+        val userDetails = jwtUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        val token = jwtToken.generateToken(userDetails);
+        val userId = mainRepository.findByUsername(authenticationRequest.getUsername()).id;
+        usrTokenRepository.save(new UsrToken(token, userId));
         return ResponseEntity.ok(new JwtResponse(token));
     }
 

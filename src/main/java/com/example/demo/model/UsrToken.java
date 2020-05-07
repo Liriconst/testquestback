@@ -8,13 +8,14 @@ public class UsrToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private long usr_id;
+    private long usrId;
     private String token;
 
     public UsrToken() {}
 
-    public UsrToken(String token) {
+    public UsrToken(String token, long usrId) {
         this.token = token;
+        this.usrId = usrId;
     }
 
     public long getId() {
@@ -25,12 +26,12 @@ public class UsrToken {
         this.id = id;
     }
 
-    public long getUsr_id() {
-        return usr_id;
+    public long getUsrId() {
+        return usrId;
     }
 
-    public void setUsr_id(long usr_id) {
-        this.usr_id = usr_id;
+    public void setUsrId(long usrId) {
+        this.usrId = usrId;
     }
 
     public String getToken() {
