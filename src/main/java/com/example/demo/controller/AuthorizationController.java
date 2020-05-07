@@ -49,7 +49,7 @@ public class AuthorizationController {
         val userDetails = jwtUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         val token = jwtToken.generateToken(userDetails);
         val userId = mainRepository.findByUsername(authenticationRequest.getUsername()).id;
-        usrTokenRepository.save(new UsrToken(token, userId));
+        usrTokenRepository.save(new UsrToken(userId, token));
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
