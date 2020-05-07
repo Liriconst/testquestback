@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.UsrToken;
+import com.example.demo.entity.UsrToken;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.config.JwtToken;
 import com.example.demo.model.JwtRequest;

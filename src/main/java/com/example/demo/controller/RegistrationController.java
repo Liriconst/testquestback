@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.exceptions.ValidationException;
-import com.example.demo.model.User;
+import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
